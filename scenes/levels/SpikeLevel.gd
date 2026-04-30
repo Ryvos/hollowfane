@@ -1,14 +1,14 @@
 extends Node2D
 
-## SpikeLevel — procedural 8×8 floor of Sprite2D children for the v0.1.0 spike.
+## SpikeLevel — procedural floor + 1 enemy spawn for the v0.2.0 combat spike.
 ##
-## We don't use TileMapLayer + TileSet.tres yet. Authoring a TileSet resource
-## as raw text is finicky outside the Godot editor; the spike's job is to
-## prove iso math works, which placing Sprite2D children at IsoUtils-derived
-## positions demonstrates equally well. TileMapLayer authoring lands Week 2+.
+## Floor is still Sprite2D-based (TileMapLayer + TileSet.tres lands Week 5).
+## Enemy spawns at tile (4,4) so the player at (0,0) can walk over and engage.
 
 const FLOOR_SIZE: int = 8
 const FLOOR_TEX_PATH: String = "res://assets/tiles/kenney_iso_miniature_dungeon/Isometric/dirt_E.png"
+const ENEMY_SCENE: PackedScene = preload("res://scenes/actors/Enemy.tscn")
+const ENEMY_SPAWN_TILE: Vector2i = Vector2i(4, 4)
 
 
 func _ready() -> void:
@@ -22,9 +22,9 @@ func _ready() -> void:
 			var s: Sprite2D = Sprite2D.new()
 			s.texture = tex
 			s.centered = true
-			# Kenney iso tile texture is 256x512 with the floor face occupying
-			# the bottom half. Shift up by ~half the height so the floor-face
-			# center sits at the IsoUtils tile center.
 			s.offset = Vector2(0, -128)
 			s.position = IsoUtils.tile_to_world(Vector2i(x, y))
 			add_child(s)
+	var enemy: CharacterBody2D = ENEMY_SCENE.instantiate()
+	enemy.position = IsoUtils.tile_to_world(ENEMY_SPAWN_TILE)
+	add_child(enemy)

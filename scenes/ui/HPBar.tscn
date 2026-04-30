@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://b4hpbarhollowfane"]
+
+[ext_resource type="Script" path="res://scripts/ui/HPBar.gd" id="1"]
+
+[node name="HPBar" type="Control"]
+mouse_filter = 2
+script = ExtResource("1")
