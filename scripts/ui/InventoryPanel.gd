@@ -88,6 +88,10 @@ func _on_cell_pressed(idx: int) -> void:
 	var it: Item = Inventory.get_at(idx)
 	if it == null:
 		return
+	# Gems can't be "equipped" from inventory click — they socket into items.
+	# The socket-install UI lands Week 9; until then a gem click is a no-op.
+	if it.slot == "gem":
+		return
 	# Equip: take it out, push prev back into the same slot.
 	Inventory.remove_at(idx)
 	var prev: Item = PlayerStats.equip(it)

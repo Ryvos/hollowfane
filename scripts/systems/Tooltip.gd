@@ -88,6 +88,11 @@ func _build_text(it: Item, equipped: Item) -> String:
 	lines.append("[color=%s][b]%s[/b][/color]" % [hex, it.get_display_name()])
 	lines.append("[color=%s][i]%s[/i][/color]" % [hex, it.get_rarity_name()])
 	lines.append("[color=%s]Item Level %d  ·  %s[/color]" % [COLOR_SUBHEAD, it.item_level, it.slot.capitalize()])
+	if it.flavor != "":
+		lines.append("[color=%s][i]%s[/i][/color]" % [hex, it.flavor])
+	if it.sockets > 0:
+		var s_filled: int = it.socketed_gems.size()
+		lines.append("[color=%s]Sockets: %d / %d[/color]" % [COLOR_SUBHEAD, s_filled, it.sockets])
 	lines.append("")
 	lines.append("Damage: [b]%d[/b]" % it.get_total_damage())
 	var hp_bonus: int = it.get_stat_total("max_hp")

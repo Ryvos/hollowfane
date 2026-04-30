@@ -20,6 +20,7 @@ var _resource_placeholder: Control = null
 var _inventory_panel: InventoryPanel = null
 var _character_panel: CharacterPanel = null
 var _quest_panel: QuestLogPanel = null
+var _imbue_panel: ImbuePanel = null
 var _player: CharacterBody2D = null
 
 
@@ -111,6 +112,12 @@ func _build_panels() -> void:
 	_quest_panel.visible = false
 	_root.add_child(_quest_panel)
 
+	_imbue_panel = ImbuePanel.new()
+	_imbue_panel.set_anchors_preset(Control.PRESET_CENTER)
+	_imbue_panel.position = Vector2(-280, -180)
+	_imbue_panel.visible = false
+	_root.add_child(_imbue_panel)
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not (event is InputEventKey):
@@ -129,11 +136,26 @@ func _unhandled_input(event: InputEvent) -> void:
 			_quest_panel.visible = not _quest_panel.visible
 			get_viewport().set_input_as_handled()
 		KEY_ESCAPE:
-			if _inventory_panel.visible or _character_panel.visible or _quest_panel.visible:
+			if _inventory_panel.visible or _character_panel.visible or _quest_panel.visible or _imbue_panel.visible:
 				_inventory_panel.visible = false
 				_character_panel.visible = false
 				_quest_panel.visible = false
+				_imbue_panel.visible = false
 				get_viewport().set_input_as_handled()
+
+
+func show_panel(name_id: String) -> void:
+	# Called by NPCs (e.g. clicking the Imbuer) and any future code that needs
+	# to surface a HUD panel from gameplay.
+	match name_id:
+		"imbue":
+			_imbue_panel.visible = true
+		"inventory":
+			_inventory_panel.visible = true
+		"character":
+			_character_panel.visible = true
+		"quest":
+			_quest_panel.visible = true
 
 
 func bind_player(player: CharacterBody2D) -> void:

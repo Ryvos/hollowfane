@@ -28,10 +28,11 @@ const NPCS: Array[Dictionary] = [
 	{
 		"id": "imbuer",
 		"name": "Veska the Imbuer",
-		"role": "Bring me three trinkets of one shape; I will make them sing as one. (Coming Week 8.)",
+		"role": "Bring me three trinkets of one shape; I will make them sing as one.",
 		"tile": Vector2i(5, 2),
 		"color": Color(0.55, 0.25, 0.55),
 		"quest_complete": "",
+		"panel": "imbue",
 	},
 	{
 		"id": "stash",
@@ -83,6 +84,7 @@ func _spawn_npcs() -> void:
 		npc.role_text = String(entry["role"])
 		npc.body_color = entry["color"]
 		npc.quest_complete_id = String(entry["quest_complete"])
+		npc.panel_id = String(entry.get("panel", ""))
 		npc.position = IsoUtils.tile_to_world(entry["tile"])
 		add_child(npc)
 

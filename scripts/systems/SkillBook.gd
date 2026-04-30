@@ -22,9 +22,9 @@ const SKILLS: Dictionary = {
 		"id": "furyborn_strike",
 		"name": "Furyborn Strike",
 		"icon_color": Color(0.95, 0.4, 0.3),
-		"description": "Erupt forward with a burning blow. Deals +50 damage.",
-		"damage_bonus": 50,
-		"cooldown": 5.0,
+		"description": "Erupt forward with a burning blow. Deals +60 damage.",
+		"damage_bonus": 60,
+		"cooldown": 4.0,
 	},
 }
 

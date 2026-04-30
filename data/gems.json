@@ -1,0 +1,29 @@
+{
+  "_comment": "Gems for HOLLOWFANE v0.8.0 sockets system (spec §4.4 — 5 types × 5 quality tiers at v1.0). Spike subset: 3 types × 1 tier. Gems are inventory-only items (slot=gem) that the future Socket Gem UI inserts into items with sockets. v0.8.0 ships the data model + drop-table integration; the actual socket UI is deferred to Week 9, so gems currently land in inventory but cannot yet be installed.",
+  "gems": [
+    {
+      "id": "ruby_chipped",
+      "name": "Chipped Ruby",
+      "tier": 1,
+      "stat": "damage_flat",
+      "value": 6,
+      "color": [0.95, 0.25, 0.25]
+    },
+    {
+      "id": "sapphire_chipped",
+      "name": "Chipped Sapphire",
+      "tier": 1,
+      "stat": "max_hp",
+      "value": 18,
+      "color": [0.30, 0.50, 0.95]
+    },
+    {
+      "id": "skull_chipped",
+      "name": "Chipped Skull",
+      "tier": 1,
+      "stat": "damage_flat",
+      "value": 4,
+      "color": [0.85, 0.85, 0.85]
+    }
+  ]
+}

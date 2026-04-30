@@ -18,6 +18,9 @@ const BORDER: Color = Color(0.55, 0.45, 0.32)
 @export var role_text: String = "Coming in a later update."
 @export var quest_complete_id: String = ""
 @export var body_color: Color = Color(0.6, 0.4, 0.2)
+# When set, clicking this NPC opens the named HUD panel instead of the
+# placeholder dialog. Currently supported: "imbue".
+@export var panel_id: String = ""
 
 var _name_label: Label = null
 var _body: ColorRect = null
@@ -61,7 +64,12 @@ func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> voi
 	if event is InputEventMouseButton:
 		var mb: InputEventMouseButton = event
 		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT:
-			_open_dialog()
+			if panel_id != "":
+				HUD.show_panel(panel_id)
+				if quest_complete_id != "":
+					QuestLog.complete(quest_complete_id)
+			else:
+				_open_dialog()
 			get_viewport().set_input_as_handled()
 
 

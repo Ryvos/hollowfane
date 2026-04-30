@@ -37,12 +37,22 @@ const RARITY_COLORS: Dictionary = {
 @export var suffix: Dictionary = {}
 @export var extra_affixes: Array[Dictionary] = []
 # Inventory cell footprint. Spec §6.2: 1×1 rings, 2×2 boots, 2×4 two-handers.
-# v0.4.0 only ships 1×1; multi-cell layout lands Week 8 alongside crafting.
+# v0.4.0 only ships 1×1; multi-cell layout lands later alongside crafting.
 @export var cell_w: int = 1
 @export var cell_h: int = 1
+# v0.8.0: sockets + uniques. Sockets count and which gems are in them; the
+# socket-install UI lands Week 9. `display_name_override` is set for unique
+# items so their flavor name ("Crusher of Kings") survives prefix/suffix logic.
+# `flavor` is a one-line italic blurb shown in the tooltip for uniques.
+@export var sockets: int = 0
+@export var socketed_gems: Array[Dictionary] = []
+@export var display_name_override: String = ""
+@export var flavor: String = ""
 
 
 func get_display_name() -> String:
+	if display_name_override != "":
+		return display_name_override
 	var pre: String = String(prefix.get("name", ""))
 	var suf: String = String(suffix.get("name", ""))
 	var parts: PackedStringArray = []
@@ -62,6 +72,13 @@ func get_all_affixes() -> Array[Dictionary]:
 		out.append(suffix)
 	for a: Dictionary in extra_affixes:
 		out.append(a)
+	for g: Dictionary in socketed_gems:
+		out.append({
+			"id": String(g.get("id", "")),
+			"name": "Gem: %s" % String(g.get("name", "")),
+			"stat": g.get("stat", ""),
+			"value": int(g.get("value", 0)),
+		})
 	return out
 
 

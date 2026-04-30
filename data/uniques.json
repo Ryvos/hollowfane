@@ -1,0 +1,68 @@
+{
+  "_comment": "Unique items for HOLLOWFANE v0.8.0. Spec §4.4 calls for ≥60 uniques at v1.0; this is the spike subset. Each unique has a fixed name, flavor line, base item ref (matched against data/items.json), and 4–5 fixed affixes. The unique_mechanic field is descriptive only in v0.8.0 — the on-hit / on-cast hooks land Week 9 alongside class skill kits. LootRoller injects one of these on a UNIQUE rarity roll.",
+  "uniques": [
+    {
+      "id": "crusher_of_kings",
+      "base_id": "iron_sword",
+      "name": "Crusher of Kings",
+      "flavor": "Forged in the bone-pits of the third age.",
+      "affixes": [
+        {"id": "u_dmg",  "name": "Sovereign Edge", "stat": "damage_flat", "value": 22},
+        {"id": "u_dmg2", "name": "Cleaving Bite",  "stat": "damage_flat", "value": 14},
+        {"id": "u_hp",   "name": "Crowned Iron",   "stat": "max_hp",      "value": 35},
+        {"id": "u_hp2",  "name": "Royal Mass",     "stat": "max_hp",      "value": 22}
+      ],
+      "unique_mechanic": "On hit: chains a faint lightning arc to one nearby enemy. (Wired Week 9.)"
+    },
+    {
+      "id": "whisper_of_ash",
+      "base_id": "crude_club",
+      "name": "Whisper of Ash",
+      "flavor": "It hums when the bearer steps near a tomb.",
+      "affixes": [
+        {"id": "u_dmg",  "name": "Soft Tongue",    "stat": "damage_flat", "value": 18},
+        {"id": "u_hp",   "name": "Hollow Lungs",   "stat": "max_hp",      "value": 60},
+        {"id": "u_hp2",  "name": "Ash-Cold Skin",  "stat": "max_hp",      "value": 40}
+      ],
+      "unique_mechanic": "On kill: heal 5 HP. (Wired Week 9.)"
+    },
+    {
+      "id": "axe_of_sunrise",
+      "base_id": "steel_blade",
+      "name": "Axe of Sunrise",
+      "flavor": "Cast from the scrap of a fallen sun-tower.",
+      "affixes": [
+        {"id": "u_dmg",  "name": "First Light",    "stat": "damage_flat", "value": 30},
+        {"id": "u_dmg2", "name": "Crested Edge",   "stat": "damage_flat", "value": 20},
+        {"id": "u_hp",   "name": "Solar Vest",     "stat": "max_hp",      "value": 25}
+      ],
+      "unique_mechanic": "Casts a small dawn-pulse on the player every 8s. (Wired Week 9.)"
+    },
+    {
+      "id": "frostmother_fang",
+      "base_id": "iron_sword",
+      "name": "Frostmother's Fang",
+      "flavor": "Once a fang. Once a child. Once a song.",
+      "affixes": [
+        {"id": "u_dmg",  "name": "Cold Fracture",  "stat": "damage_flat", "value": 16},
+        {"id": "u_dmg2", "name": "Lingering Bite", "stat": "damage_flat", "value": 16},
+        {"id": "u_dmg3", "name": "Mother's Grief", "stat": "damage_flat", "value": 8},
+        {"id": "u_hp",   "name": "Frozen Marrow",  "stat": "max_hp",      "value": 45}
+      ],
+      "unique_mechanic": "Slows struck enemies for 0.6s. (Wired Week 9.)"
+    },
+    {
+      "id": "vow_of_the_silent",
+      "base_id": "steel_blade",
+      "name": "Vow of the Silent",
+      "flavor": "She broke her vow once. She does not speak of it.",
+      "affixes": [
+        {"id": "u_dmg",  "name": "Cut of Silence", "stat": "damage_flat", "value": 26},
+        {"id": "u_dmg2", "name": "Held Breath",    "stat": "damage_flat", "value": 18},
+        {"id": "u_hp",   "name": "Penitent Mail",  "stat": "max_hp",      "value": 50},
+        {"id": "u_hp2",  "name": "Devout Iron",    "stat": "max_hp",      "value": 30}
+      ],
+      "unique_mechanic": "Crit chance vs. enemies above 80% HP doubles. (Wired Week 9.)"
+    }
+  ]
+}
