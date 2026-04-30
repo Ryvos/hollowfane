@@ -29,6 +29,12 @@ const QUESTS: Array[Dictionary] = [
 		"id": "slay_hollow_bishop",
 		"title": "The Hollow Bishop",
 		"summary": "Defeat the Hollow Bishop in the depths.",
+		"unlocks": "slay_worm_mother",
+	},
+	{
+		"id": "slay_worm_mother",
+		"title": "The Worm-Mother",
+		"summary": "Descend into the Frostvein. End her brood.",
 		"unlocks": "",
 	},
 ]

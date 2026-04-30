@@ -22,6 +22,7 @@ var _has_target: bool = false
 var _hp_max: int = PlayerStats.BASE_MAX_HP
 var _hp: int = PlayerStats.BASE_MAX_HP
 var _spawn_position: Vector2 = Vector2.ZERO
+var _skill_cooldowns: PackedFloat32Array = PackedFloat32Array()
 
 signal hp_changed(current: int, maximum: int)
 signal died()
@@ -39,7 +40,11 @@ func _ready() -> void:
 	PlayerStats.stats_changed.connect(_on_stats_changed)
 	Hotbar.skill_activated.connect(_on_skill_activated)
 	HUD.bind_player(self)
+	_skill_cooldowns.resize(Hotbar.SLOTS)
+	for i: int in range(Hotbar.SLOTS):
+		_skill_cooldowns[i] = 0.0
 	_recompute_hp_max()
+	_hp = _hp_max  # respect class base on fresh boot (Furyborn = 120 HP)
 	hp_changed.emit(_hp, _hp_max)
 
 
@@ -72,6 +77,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	for i: int in range(_skill_cooldowns.size()):
+		if _skill_cooldowns[i] > 0.0:
+			_skill_cooldowns[i] = maxf(0.0, _skill_cooldowns[i] - delta)
 	if not _has_target:
 		return
 	var target_world: Vector2 = IsoUtils.tile_to_world(_target_tile)
@@ -151,11 +159,24 @@ func _on_stats_changed() -> void:
 	hp_changed.emit(_hp, _hp_max)
 
 
-func _on_skill_activated(_slot: int, skill_id: String) -> void:
-	if skill_id == "basic_attack":
-		var nearest: Node = _find_enemy_near(global_position, 400.0)
-		if nearest != null:
-			_attack(nearest)
+func _on_skill_activated(slot: int, skill_id: String) -> void:
+	if slot < 0 or slot >= _skill_cooldowns.size():
+		return
+	if _skill_cooldowns[slot] > 0.0:
+		return
+	var meta: Dictionary = SkillBook.get_skill(skill_id)
+	if meta.is_empty():
+		return
+	var bonus: int = int(meta.get("damage_bonus", 0))
+	var cd: float = float(meta.get("cooldown", 0.0))
+	var nearest: Node = _find_enemy_near(global_position, 400.0)
+	if nearest == null:
+		return
+	_has_target = false
+	_sprite.play(&"idle")
+	if nearest.has_method(&"take_damage"):
+		nearest.take_damage(PlayerStats.get_attack_damage() + bonus)
+	_skill_cooldowns[slot] = cd
 
 
 func _on_hp_changed(current: int, maximum: int) -> void:

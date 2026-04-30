@@ -16,10 +16,31 @@ extends Node
 const BASE_DAMAGE: int = 25
 const BASE_MAX_HP: int = 100
 
+# Per-class base stats. Spec §4.2 lists 3 launch + 1 unlockable classes;
+# v0.7.0 ships Hollowbinder (default) + Furyborn (Week 7's playable Class #2).
+# Frostmark and the unlockable Sealwarden land Weeks 9–10 with their own
+# entries here.
+const CLASSES: Dictionary = {
+	"hollowbinder": {
+		"name": "Hollowbinder",
+		"base_damage": 25,
+		"base_max_hp": 100,
+		"starting_skill": "basic_attack",
+	},
+	"furyborn": {
+		"name": "Furyborn",
+		"base_damage": 22,
+		"base_max_hp": 120,
+		"starting_skill": "furyborn_strike",
+	},
+}
+
 var _equipped: Dictionary = {}  # slot -> Item
+var class_id: String = "hollowbinder"
 
 signal stats_changed
 signal item_equipped(item: Item, prev: Item)
+signal class_changed(class_id: String)
 
 
 func equip(item: Item) -> Item:
@@ -48,7 +69,7 @@ func get_equipped(slot_key: String) -> Item:
 func get_attack_damage() -> int:
 	var weapon: Item = _equipped.get("weapon", null)
 	if weapon == null:
-		return BASE_DAMAGE
+		return get_class_base_damage()
 	return weapon.get_total_damage()
 
 
@@ -57,4 +78,34 @@ func get_max_hp() -> int:
 	for slot_key: String in _equipped.keys():
 		var it: Item = _equipped[slot_key]
 		bonus += it.get_stat_total("max_hp")
-	return BASE_MAX_HP + bonus
+	return get_class_base_max_hp() + bonus
+
+
+func get_class_base_damage() -> int:
+	return int(CLASSES.get(class_id, {}).get("base_damage", BASE_DAMAGE))
+
+
+func get_class_base_max_hp() -> int:
+	return int(CLASSES.get(class_id, {}).get("base_max_hp", BASE_MAX_HP))
+
+
+func get_class_name() -> String:
+	return String(CLASSES.get(class_id, {}).get("name", "Hollowbinder"))
+
+
+func set_class(id: String) -> void:
+	if not CLASSES.has(id) or class_id == id:
+		return
+	class_id = id
+	var starting_skill: String = String(CLASSES[id].get("starting_skill", ""))
+	if starting_skill != "":
+		Hotbar.set_slot(0, starting_skill)
+	class_changed.emit(id)
+	stats_changed.emit()
+
+
+func get_class_ids() -> Array[String]:
+	var out: Array[String] = []
+	for k: String in CLASSES.keys():
+		out.append(k)
+	return out

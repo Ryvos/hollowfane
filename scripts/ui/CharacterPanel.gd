@@ -70,9 +70,15 @@ func _ready() -> void:
 	_stats_label.bbcode_enabled = true
 	_stats_label.fit_content = true
 	_stats_label.scroll_active = false
-	_stats_label.custom_minimum_size = Vector2(220, 250)
+	_stats_label.custom_minimum_size = Vector2(220, 220)
 	stats_box.add_child(_stats_label)
+	var class_btn: Button = Button.new()
+	class_btn.text = "Switch Class"
+	class_btn.focus_mode = Control.FOCUS_NONE
+	class_btn.pressed.connect(_on_class_switch_pressed)
+	stats_box.add_child(class_btn)
 	PlayerStats.stats_changed.connect(_refresh)
+	PlayerStats.class_changed.connect(_on_class_changed)
 	_refresh()
 
 
@@ -116,6 +122,7 @@ func _style_slot(btn: Button, slot_key: String, it: Item) -> void:
 
 func _build_stats_text() -> String:
 	var lines: PackedStringArray = []
+	lines.append("[color=#ffd97a][b]%s[/b][/color]" % PlayerStats.get_class_name())
 	lines.append("[b]Stats[/b]")
 	lines.append("Damage: [b]%d[/b]" % PlayerStats.get_attack_damage())
 	lines.append("Max HP: [b]%d[/b]" % PlayerStats.get_max_hp())
@@ -127,6 +134,19 @@ func _build_stats_text() -> String:
 	lines.append("[color=#999999]Equipped: %d / 10[/color]" % equipped_count)
 	lines.append("[color=#999999]Inv free: %d / %d[/color]" % [Inventory.free_count(), Inventory.TOTAL_CELLS])
 	return "\n".join(lines)
+
+
+func _on_class_switch_pressed() -> void:
+	var ids: Array[String] = PlayerStats.get_class_ids()
+	if ids.is_empty():
+		return
+	var idx: int = ids.find(PlayerStats.class_id)
+	var next: String = ids[(idx + 1) % ids.size()]
+	PlayerStats.set_class(next)
+
+
+func _on_class_changed(_id: String) -> void:
+	_refresh()
 
 
 func _on_slot_pressed(slot_key: String) -> void:

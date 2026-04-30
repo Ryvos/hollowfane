@@ -15,6 +15,16 @@ const SKILLS: Dictionary = {
 		"name": "Basic Strike",
 		"icon_color": Color(0.85, 0.7, 0.4),
 		"description": "Strike the nearest enemy in melee range.",
+		"damage_bonus": 0,
+		"cooldown": 0.0,
+	},
+	"furyborn_strike": {
+		"id": "furyborn_strike",
+		"name": "Furyborn Strike",
+		"icon_color": Color(0.95, 0.4, 0.3),
+		"description": "Erupt forward with a burning blow. Deals +50 damage.",
+		"damage_bonus": 50,
+		"cooldown": 5.0,
 	},
 }
 
