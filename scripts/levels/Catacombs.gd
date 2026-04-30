@@ -16,6 +16,13 @@ const DUNGEON_H_TILES: int = 28
 const FLOOR_TEX_PATH: String = "res://assets/tiles/kenney_iso_miniature_dungeon/Isometric/dirt_E.png"
 const WALL_TEX_PATH: String = "res://assets/tiles/kenney_iso_miniature_dungeon/Isometric/stoneWallAged_E.png"
 const ENEMY_SCENE: PackedScene = preload("res://scenes/actors/Enemy.tscn")
+const PORTAL_SCENE: PackedScene = preload("res://scenes/actors/ScenePortal.tscn")
+const HUB_SCENE_PATH: String = "res://scenes/main/Main.tscn"
+const BISHOP_HP: int = 240
+const BISHOP_DMG: int = 25
+const BISHOP_ITEM_LEVEL: int = 5
+const BISHOP_DROPS: int = 3
+const BISHOP_DROP_MIN_RARITY: int = 1  # Item.Rarity.MAGIC
 const FLOOR_SPRITE_OFFSET: Vector2 = Vector2(0, -128)
 const WALL_SPRITE_OFFSET: Vector2 = Vector2(0, -256)
 const AMBIENT_TINT: Color = Color(0.18, 0.22, 0.32)
@@ -41,12 +48,49 @@ func _ready() -> void:
 	_render_walls()
 	_add_canvas_modulate()
 	_add_room_lights()
+	_spawn_return_portal()
+	_spawn_boss()
 	# Defer player placement so it runs after every sibling _ready (the Player
 	# may not have added itself to the "player" group yet if Catacombs runs
 	# first in Main's child order).
 	call_deferred(&"_place_player")
 	call_deferred(&"_spawn_enemies")
 	_log_validation()
+
+
+func _spawn_return_portal() -> void:
+	var entrance: Vector2i = _dungeon.get("entrance", Vector2i.ZERO)
+	var portal: ScenePortal = PORTAL_SCENE.instantiate()
+	portal.target_scene = HUB_SCENE_PATH
+	portal.label_text = "← Whitestone"
+	portal.quest_complete_id = ""
+	portal.portal_color = Color(0.85, 0.65, 0.35, 0.85)
+	# Place the portal one tile north of the entrance so the player isn't
+	# standing on it the moment they arrive.
+	portal.position = IsoUtils.tile_to_world(entrance + Vector2i(0, -1))
+	add_child(portal)
+
+
+func _spawn_boss() -> void:
+	if QuestLog.is_complete("slay_hollow_bishop"):
+		# The bishop is dead and stays dead — even if the dungeon regenerates.
+		return
+	var dungeon_exit: Vector2i = _dungeon.get("exit", Vector2i.ZERO)
+	var entrance: Vector2i = _dungeon.get("entrance", Vector2i.ZERO)
+	if dungeon_exit == entrance:
+		return  # single-room dungeon edge case
+	var bishop: CharacterBody2D = ENEMY_SCENE.instantiate()
+	bishop.hp_max = BISHOP_HP
+	bishop.attack_damage = BISHOP_DMG
+	bishop.item_level = BISHOP_ITEM_LEVEL
+	bishop.is_boss = true
+	bishop.boss_name = "The Hollow Bishop"
+	bishop.quest_on_death = "slay_hollow_bishop"
+	bishop.drops_count = BISHOP_DROPS
+	bishop.drops_min_rarity = BISHOP_DROP_MIN_RARITY
+	bishop.sprite_variant = 2  # Male_2 — a third silhouette for the boss
+	bishop.position = IsoUtils.tile_to_world(dungeon_exit)
+	add_child(bishop)
 
 
 func _generate(seed_val: int) -> void:
@@ -126,9 +170,11 @@ func _spawn_enemies() -> void:
 	var centers: Array[Vector2i] = _dungeon.get("room_centers", [])
 	if centers.size() <= 1:
 		return
+	var dungeon_exit: Vector2i = _dungeon.get("exit", Vector2i.ZERO)
 	var spawned: int = 0
-	# Skip room 0 (entrance) so the player gets a moment before the first fight.
-	for i: int in range(1, centers.size()):
+	# Skip room 0 (entrance) so the player gets a moment before the first
+	# fight; skip the exit room because the boss lives there.
+	for i: int in range(1, centers.size() - 1):
 		if spawned >= MAX_ENEMIES:
 			break
 		for j: int in range(ENEMIES_PER_ROOM):

@@ -19,6 +19,7 @@ var _hotbar_ui: HotbarUI = null
 var _resource_placeholder: Control = null
 var _inventory_panel: InventoryPanel = null
 var _character_panel: CharacterPanel = null
+var _quest_panel: QuestLogPanel = null
 var _player: CharacterBody2D = null
 
 
@@ -104,6 +105,12 @@ func _build_panels() -> void:
 	_character_panel.visible = false
 	_root.add_child(_character_panel)
 
+	_quest_panel = QuestLogPanel.new()
+	_quest_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	_quest_panel.position = Vector2(24, 24)
+	_quest_panel.visible = false
+	_root.add_child(_quest_panel)
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not (event is InputEventKey):
@@ -118,14 +125,24 @@ func _unhandled_input(event: InputEvent) -> void:
 		KEY_C:
 			_character_panel.visible = not _character_panel.visible
 			get_viewport().set_input_as_handled()
+		KEY_Q:
+			_quest_panel.visible = not _quest_panel.visible
+			get_viewport().set_input_as_handled()
 		KEY_ESCAPE:
-			if _inventory_panel.visible or _character_panel.visible:
+			if _inventory_panel.visible or _character_panel.visible or _quest_panel.visible:
 				_inventory_panel.visible = false
 				_character_panel.visible = false
+				_quest_panel.visible = false
 				get_viewport().set_input_as_handled()
 
 
 func bind_player(player: CharacterBody2D) -> void:
+	# Disconnect the previous Player's signal first; on scene transitions the
+	# old Player has been queue_freed but its signal connection records here
+	# until we explicitly drop them.
+	if _player != null and is_instance_valid(_player):
+		if _player.has_signal("hp_changed") and _player.hp_changed.is_connected(_on_player_hp_changed):
+			_player.hp_changed.disconnect(_on_player_hp_changed)
 	_player = player
 	if player.has_signal("hp_changed"):
 		player.hp_changed.connect(_on_player_hp_changed)

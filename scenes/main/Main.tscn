@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://b3mainhollowfane"]
 
-[ext_resource type="PackedScene" path="res://scenes/levels/Catacombs.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/levels/WhitestoneHub.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/actors/Player.tscn" id="2"]
 
 [node name="Main" type="Node2D"]
 y_sort_enabled = true
 
-[node name="Catacombs" parent="." instance=ExtResource("1")]
-
 [node name="Player" parent="." instance=ExtResource("2")]
+
+[node name="WhitestoneHub" parent="." instance=ExtResource("1")]

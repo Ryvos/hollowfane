@@ -48,10 +48,12 @@ func _load_data() -> void:
 	_data_ok = _weapons.size() > 0 and _prefixes.size() > 0 and _suffixes.size() > 0
 
 
-func roll(monster_level: int = 1, magic_find: float = 0.0) -> Item:
+func roll(monster_level: int = 1, magic_find: float = 0.0, min_rarity: int = -1) -> Item:
 	if not _data_ok:
 		return null
 	var rarity: int = _roll_rarity(magic_find)
+	if min_rarity >= 0 and rarity < min_rarity:
+		rarity = min_rarity
 	var base: Dictionary = _pick_base(monster_level)
 	var item: Item = Item.new()
 	item.base_id = String(base.get("id", ""))
