@@ -133,6 +133,15 @@ func _recompute_hp_max() -> void:
 		_hp = _hp_max
 
 
+func set_spawn_tile(tile: Vector2i) -> void:
+	# Levels (e.g. Catacombs entrance, future Whitestone hub) call this so that
+	# both the initial position and the respawn-on-death position track the
+	# level's intended start. Without this, _spawn_position is locked to (0,0).
+	_spawn_position = IsoUtils.tile_to_world(tile)
+	global_position = _spawn_position
+	_has_target = false
+
+
 func _on_stats_changed() -> void:
 	var prev_max: int = _hp_max
 	_recompute_hp_max()

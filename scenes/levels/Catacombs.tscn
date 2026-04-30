@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://b5catacombshollowfane"]
+
+[ext_resource type="Script" path="res://scripts/levels/Catacombs.gd" id="1"]
+
+[node name="Catacombs" type="Node2D"]
+script = ExtResource("1")
+y_sort_enabled = true
