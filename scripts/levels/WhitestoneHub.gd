@@ -15,6 +15,7 @@ const PORTAL_SCENE: PackedScene = preload("res://scenes/actors/ScenePortal.tscn"
 const SPAWN_TILE: Vector2i = Vector2i(3, 3)
 const CATACOMBS_PORTAL_TARGET: String = "res://scenes/main/Main_Catacombs.tscn"
 const FROSTVEIN_PORTAL_TARGET: String = "res://scenes/main/Main_Frostvein.tscn"
+const CINDERFALL_PORTAL_TARGET: String = "res://scenes/main/Main_Cinderfall.tscn"
 
 const NPCS: Array[Dictionary] = [
 	{
@@ -108,6 +109,13 @@ func _spawn_portal() -> void:
 	frost_portal.portal_color = Color(0.55, 0.80, 0.95, 0.85)
 	frost_portal.position = IsoUtils.tile_to_world(Vector2i(4, 6))
 	add_child(frost_portal)
+	var cinder_portal: ScenePortal = PORTAL_SCENE.instantiate()
+	cinder_portal.target_scene = CINDERFALL_PORTAL_TARGET
+	cinder_portal.label_text = "→ Cinderfall Spire"
+	cinder_portal.quest_complete_id = ""
+	cinder_portal.portal_color = Color(1.0, 0.55, 0.30, 0.90)
+	cinder_portal.position = IsoUtils.tile_to_world(Vector2i(6, 6))
+	add_child(cinder_portal)
 
 
 func _place_player() -> void:

@@ -21,6 +21,7 @@ var _inventory_panel: InventoryPanel = null
 var _character_panel: CharacterPanel = null
 var _quest_panel: QuestLogPanel = null
 var _imbue_panel: ImbuePanel = null
+var _ending_cutscene: EndingCutscene = null
 var _player: CharacterBody2D = null
 
 
@@ -117,6 +118,9 @@ func _build_panels() -> void:
 	_imbue_panel.position = Vector2(-280, -180)
 	_imbue_panel.visible = false
 	_root.add_child(_imbue_panel)
+
+	_ending_cutscene = EndingCutscene.new()
+	_root.add_child(_ending_cutscene)
 
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://b13maincindhollowfane"]
+
+[ext_resource type="PackedScene" path="res://scenes/levels/CinderfallSpire.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/actors/Player.tscn" id="2"]
+
+[node name="Main" type="Node2D"]
+y_sort_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("2")]
+
+[node name="CinderfallSpire" parent="." instance=ExtResource("1")]

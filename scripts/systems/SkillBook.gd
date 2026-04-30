@@ -26,6 +26,14 @@ const SKILLS: Dictionary = {
 		"damage_bonus": 60,
 		"cooldown": 4.0,
 	},
+	"frostmark_pulse": {
+		"id": "frostmark_pulse",
+		"name": "Frostmark Pulse",
+		"icon_color": Color(0.55, 0.85, 1.0),
+		"description": "A bolt of cold lances the nearest foe. +45 damage.",
+		"damage_bonus": 45,
+		"cooldown": 6.0,
+	},
 }
 
 

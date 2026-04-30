@@ -33,6 +33,12 @@ const CLASSES: Dictionary = {
 		"base_max_hp": 120,
 		"starting_skill": "furyborn_strike",
 	},
+	"frostmark": {
+		"name": "Frostmark",
+		"base_damage": 28,
+		"base_max_hp": 88,
+		"starting_skill": "frostmark_pulse",
+	},
 }
 
 var _equipped: Dictionary = {}  # slot -> Item

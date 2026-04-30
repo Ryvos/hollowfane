@@ -35,6 +35,12 @@ const QUESTS: Array[Dictionary] = [
 		"id": "slay_worm_mother",
 		"title": "The Worm-Mother",
 		"summary": "Descend into the Frostvein. End her brood.",
+		"unlocks": "confront_pact_bearer",
+	},
+	{
+		"id": "confront_pact_bearer",
+		"title": "The Pact-Bearer",
+		"summary": "Climb the Cinderfall Spire. End the pact.",
 		"unlocks": "",
 	},
 ]
