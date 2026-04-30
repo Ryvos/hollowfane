@@ -1,0 +1,8 @@
+{
+  "_comment": "Base items for HOLLOWFANE v0.3.0. Spec §4.4 calls for 10 slots; the v0.3.0 spike only wires the weapon slot (the inventory grid + paper-doll arrives Week 4, then the remaining slots can be filled in without code changes). base_damage is the floor before affixes; ilevel is used by LootRoller to gate which bases drop from a monster of a given level.",
+  "weapons": [
+    {"id": "crude_club",  "name": "Crude Club",  "slot": "weapon", "base_damage": 12, "ilevel": 1},
+    {"id": "iron_sword",  "name": "Iron Sword",  "slot": "weapon", "base_damage": 22, "ilevel": 3},
+    {"id": "steel_blade", "name": "Steel Blade", "slot": "weapon", "base_damage": 34, "ilevel": 5}
+  ]
+}

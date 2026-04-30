@@ -13,6 +13,8 @@ const ATTACK_DAMAGE: int = 10
 const ATTACK_RANGE_PX: float = 180.0
 const ATTACK_COOLDOWN_S: float = 1.0
 const VARIANT: int = 1  # Male_1 — distinct from player's Male_0
+const ITEM_LEVEL: int = 3
+const GROUND_ITEM_SCENE: PackedScene = preload("res://scenes/actors/GroundItem.tscn")
 
 enum State { IDLE, CHASE, ATTACK, DEAD }
 
@@ -75,7 +77,21 @@ func take_damage(amount: int) -> void:
 
 func _die() -> void:
 	_state = State.DEAD
+	_drop_loot()
 	queue_free()
+
+
+func _drop_loot() -> void:
+	var item: Item = LootRoller.roll(ITEM_LEVEL)
+	if item == null:
+		return
+	var parent: Node = get_parent()
+	if parent == null:
+		return
+	var ground: GroundItem = GROUND_ITEM_SCENE.instantiate()
+	ground.item = item
+	ground.global_position = global_position
+	parent.call_deferred(&"add_child", ground)
 
 
 func _on_hp_changed(current: int, maximum: int) -> void:

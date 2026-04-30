@@ -12,8 +12,6 @@ extends CharacterBody2D
 const SPEED_PIXELS_PER_SEC: float = 320.0
 const ARRIVAL_EPSILON: float = 4.0
 const SPRITE_SCALE: float = 0.4
-const HP_MAX: int = 100
-const ATTACK_DAMAGE: int = 25
 const ATTACK_REACH_PX: float = 240.0  # world-space click tolerance for enemy hit
 
 @onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -21,7 +19,8 @@ const ATTACK_REACH_PX: float = 240.0  # world-space click tolerance for enemy hi
 
 var _target_tile: Vector2i
 var _has_target: bool = false
-var _hp: int = HP_MAX
+var _hp_max: int = PlayerStats.BASE_MAX_HP
+var _hp: int = PlayerStats.BASE_MAX_HP
 var _spawn_position: Vector2 = Vector2.ZERO
 
 signal hp_changed(current: int, maximum: int)
@@ -37,7 +36,9 @@ func _ready() -> void:
 	_spawn_position = IsoUtils.tile_to_world(Vector2i.ZERO)
 	global_position = _spawn_position
 	hp_changed.connect(_on_hp_changed)
-	hp_changed.emit(_hp, HP_MAX)
+	PlayerStats.stats_changed.connect(_on_stats_changed)
+	_recompute_hp_max()
+	hp_changed.emit(_hp, _hp_max)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -89,25 +90,41 @@ func _attack(enemy: Node) -> void:
 	_has_target = false
 	_sprite.play(&"idle")
 	if enemy.has_method(&"take_damage"):
-		enemy.take_damage(ATTACK_DAMAGE)
+		enemy.take_damage(PlayerStats.get_attack_damage())
 
 
 func take_damage(amount: int) -> void:
 	_hp = maxi(0, _hp - amount)
 	DamageNumbers.spawn(amount, global_position, Color(1.0, 0.3, 0.3))
-	hp_changed.emit(_hp, HP_MAX)
+	hp_changed.emit(_hp, _hp_max)
 	if _hp <= 0:
 		_respawn()
 
 
 func _respawn() -> void:
 	# Spec §4.6: 10% XP debt placeholder — wired when XP exists in v0.3.0+.
-	_hp = HP_MAX
+	_recompute_hp_max()
+	_hp = _hp_max
 	global_position = _spawn_position
 	_has_target = false
 	_sprite.play(&"idle")
-	hp_changed.emit(_hp, HP_MAX)
+	hp_changed.emit(_hp, _hp_max)
 	died.emit()
+
+
+func _recompute_hp_max() -> void:
+	_hp_max = PlayerStats.get_max_hp()
+	if _hp > _hp_max:
+		_hp = _hp_max
+
+
+func _on_stats_changed() -> void:
+	var prev_max: int = _hp_max
+	_recompute_hp_max()
+	# When equipping +max_hp gear, fill the new headroom so the upgrade is felt.
+	if _hp_max > prev_max:
+		_hp += (_hp_max - prev_max)
+	hp_changed.emit(_hp, _hp_max)
 
 
 func _on_hp_changed(current: int, maximum: int) -> void:

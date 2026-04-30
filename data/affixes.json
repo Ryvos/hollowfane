@@ -1,0 +1,27 @@
+{
+  "_comment": "Affix table for HOLLOWFANE v0.3.0 loot pipeline. Spec §4.4 targets 200+200 at v1.0; this is the spike subset (10+10) — enough to prove the pipeline. Each affix has an id, display fragment, the stat it modifies, and a [min, max] roll range. Tier is for future drop-table weighting (currently unused). For v0.3.0 only `damage_flat` and `max_hp` actually affect gameplay; the rest land in tooltips so the wiring is visible end-to-end.",
+  "prefixes": [
+    {"id": "sharp",      "name": "Sharp",      "tier": 1, "stat": "damage_flat", "min": 3,  "max": 6},
+    {"id": "brutal",     "name": "Brutal",     "tier": 2, "stat": "damage_flat", "min": 6,  "max": 10},
+    {"id": "savage",     "name": "Savage",     "tier": 3, "stat": "damage_flat", "min": 10, "max": 16},
+    {"id": "cruel",      "name": "Cruel",      "tier": 4, "stat": "damage_flat", "min": 14, "max": 22},
+    {"id": "vicious",    "name": "Vicious",    "tier": 5, "stat": "damage_flat", "min": 20, "max": 30},
+    {"id": "heavy",      "name": "Heavy",      "tier": 1, "stat": "max_hp",      "min": 8,  "max": 14},
+    {"id": "robust",     "name": "Robust",     "tier": 2, "stat": "max_hp",      "min": 14, "max": 24},
+    {"id": "stalwart",   "name": "Stalwart",   "tier": 3, "stat": "max_hp",      "min": 24, "max": 38},
+    {"id": "fortified",  "name": "Fortified",  "tier": 4, "stat": "max_hp",      "min": 38, "max": 56},
+    {"id": "indomitable","name": "Indomitable","tier": 5, "stat": "max_hp",      "min": 56, "max": 80}
+  ],
+  "suffixes": [
+    {"id": "of_power",       "name": "of Power",       "tier": 1, "stat": "damage_flat", "min": 4,  "max": 7},
+    {"id": "of_might",       "name": "of Might",       "tier": 2, "stat": "damage_flat", "min": 7,  "max": 12},
+    {"id": "of_conquest",    "name": "of Conquest",    "tier": 3, "stat": "damage_flat", "min": 12, "max": 18},
+    {"id": "of_annihilation","name": "of Annihilation","tier": 4, "stat": "damage_flat", "min": 18, "max": 26},
+    {"id": "of_apocalypse",  "name": "of the Apocalypse","tier": 5, "stat": "damage_flat","min":26,"max":40},
+    {"id": "of_the_bear",    "name": "of the Bear",    "tier": 1, "stat": "max_hp",      "min": 6,  "max": 12},
+    {"id": "of_the_mountain","name": "of the Mountain","tier": 2, "stat": "max_hp",      "min": 12, "max": 22},
+    {"id": "of_the_titan",   "name": "of the Titan",   "tier": 3, "stat": "max_hp",      "min": 22, "max": 36},
+    {"id": "of_the_colossus","name": "of the Colossus","tier": 4, "stat": "max_hp",      "min": 36, "max": 54},
+    {"id": "of_eternity",    "name": "of Eternity",    "tier": 5, "stat": "max_hp",      "min": 54, "max": 80}
+  ]
+}

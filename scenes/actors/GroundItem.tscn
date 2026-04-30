@@ -1,0 +1,36 @@
+[gd_scene load_steps=4 format=3 uid="uid://b1grounditemhollowfane"]
+
+[ext_resource type="Script" path="res://scripts/actors/GroundItem.gd" id="1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(28, 28)
+
+[sub_resource type="LabelSettings" id="LabelSettings_1"]
+font_size = 16
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[node name="GroundItem" type="Area2D"]
+script = ExtResource("1")
+input_pickable = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1")
+
+[node name="Gem" type="ColorRect" parent="."]
+offset_left = -9.0
+offset_top = -9.0
+offset_right = 9.0
+offset_bottom = 9.0
+color = Color(0.85, 0.85, 0.85, 1)
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="."]
+offset_left = -80.0
+offset_top = -50.0
+offset_right = 80.0
+offset_bottom = -28.0
+horizontal_alignment = 1
+vertical_alignment = 1
+label_settings = SubResource("LabelSettings_1")
+mouse_filter = 2
