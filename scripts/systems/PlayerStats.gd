@@ -39,7 +39,28 @@ const CLASSES: Dictionary = {
 		"base_max_hp": 88,
 		"starting_skill": "frostmark_pulse",
 	},
+	"sealwarden": {
+		"name": "Sealwarden",
+		"base_damage": 33,
+		"base_max_hp": 75,
+		"starting_skill": "sealwarden_brand",
+	},
 }
+
+
+func is_class_unlocked(id: String) -> bool:
+	# Sealwarden is the v0.10.0 unlock — gated on first Pinnacle kill.
+	if id == "sealwarden":
+		return QuestLog.is_complete("slay_pinnacle")
+	return CLASSES.has(id)
+
+
+func get_unlocked_class_ids() -> Array[String]:
+	var out: Array[String] = []
+	for k: String in CLASSES.keys():
+		if is_class_unlocked(k):
+			out.append(k)
+	return out
 
 var _equipped: Dictionary = {}  # slot -> Item
 var class_id: String = "hollowbinder"

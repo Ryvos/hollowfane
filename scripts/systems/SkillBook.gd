@@ -34,6 +34,14 @@ const SKILLS: Dictionary = {
 		"damage_bonus": 45,
 		"cooldown": 6.0,
 	},
+	"sealwarden_brand": {
+		"id": "sealwarden_brand",
+		"name": "Sealwarden Brand",
+		"icon_color": Color(0.95, 0.85, 0.45),
+		"description": "Brand a foe with a sealing rune. +85 damage.",
+		"damage_bonus": 85,
+		"cooldown": 8.0,
+	},
 }
 
 

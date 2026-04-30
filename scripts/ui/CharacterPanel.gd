@@ -137,7 +137,9 @@ func _build_stats_text() -> String:
 
 
 func _on_class_switch_pressed() -> void:
-	var ids: Array[String] = PlayerStats.get_class_ids()
+	# Cycle only through unlocked classes — Sealwarden requires the Pinnacle
+	# kill, and we don't want the button to silently reject mid-cycle.
+	var ids: Array[String] = PlayerStats.get_unlocked_class_ids()
 	if ids.is_empty():
 		return
 	var idx: int = ids.find(PlayerStats.class_id)

@@ -41,6 +41,12 @@ const QUESTS: Array[Dictionary] = [
 		"id": "confront_pact_bearer",
 		"title": "The Pact-Bearer",
 		"summary": "Climb the Cinderfall Spire. End the pact.",
+		"unlocks": "slay_pinnacle",
+	},
+	{
+		"id": "slay_pinnacle",
+		"title": "The Pinnacle",
+		"summary": "Survive the Echo. Cut down a Pinnacle.",
 		"unlocks": "",
 	},
 ]

@@ -114,8 +114,12 @@ func _drop_loot() -> void:
 	var parent: Node = get_parent()
 	if parent == null:
 		return
+	# Echo runs scale magic-find with tier so high-tier drops actually feel
+	# different (more uniques, more mythics). Outside the Echo, magic_find
+	# stays at 0.0 — kit-out is from gear, not infinite scaling.
+	var mf: float = EchoState.tier_magic_find()
 	for i: int in range(maxi(1, drops_count)):
-		var item: Item = LootRoller.roll(item_level, 0.0, drops_min_rarity)
+		var item: Item = LootRoller.roll(item_level, mf, drops_min_rarity)
 		if item == null:
 			continue
 		var ground: GroundItem = GROUND_ITEM_SCENE.instantiate()

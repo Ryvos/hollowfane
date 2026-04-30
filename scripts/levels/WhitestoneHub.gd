@@ -16,6 +16,7 @@ const SPAWN_TILE: Vector2i = Vector2i(3, 3)
 const CATACOMBS_PORTAL_TARGET: String = "res://scenes/main/Main_Catacombs.tscn"
 const FROSTVEIN_PORTAL_TARGET: String = "res://scenes/main/Main_Frostvein.tscn"
 const CINDERFALL_PORTAL_TARGET: String = "res://scenes/main/Main_Cinderfall.tscn"
+const ECHO_PORTAL_TARGET: String = "res://scenes/main/Main_Echo.tscn"
 
 const NPCS: Array[Dictionary] = [
 	{
@@ -116,6 +117,13 @@ func _spawn_portal() -> void:
 	cinder_portal.portal_color = Color(1.0, 0.55, 0.30, 0.90)
 	cinder_portal.position = IsoUtils.tile_to_world(Vector2i(6, 6))
 	add_child(cinder_portal)
+	var echo_portal: ScenePortal = PORTAL_SCENE.instantiate()
+	echo_portal.target_scene = ECHO_PORTAL_TARGET
+	echo_portal.label_text = "→ The Echo"
+	echo_portal.quest_complete_id = ""
+	echo_portal.portal_color = Color(0.85, 0.55, 1.0, 0.92)
+	echo_portal.position = IsoUtils.tile_to_world(Vector2i(3, 0))
+	add_child(echo_portal)
 
 
 func _place_player() -> void:

@@ -89,8 +89,14 @@ func _on_cell_pressed(idx: int) -> void:
 	if it == null:
 		return
 	# Gems can't be "equipped" from inventory click — they socket into items.
-	# The socket-install UI lands Week 9; until then a gem click is a no-op.
+	# The socket-install UI is still pending; until then a gem click is a no-op.
 	if it.slot == "gem":
+		return
+	# Sigils consume themselves to bump the next Echo run's tier.
+	if it.slot == "sigil":
+		Inventory.remove_at(idx)
+		EchoState.bump_tier(1)
+		Tooltip.hide_tip()
 		return
 	# Equip: take it out, push prev back into the same slot.
 	Inventory.remove_at(idx)

@@ -14,8 +14,9 @@ const AFFIXES_PATH: String = "res://data/affixes.json"
 const UNIQUES_PATH: String = "res://data/uniques.json"
 const GEMS_PATH: String = "res://data/gems.json"
 
-const SOCKET_ROLL_CHANCE: PackedFloat32Array = [0.0, 0.4, 0.7, 0.9]  # COMMON..UNIQUE: chance to have ≥1 socket
+const SOCKET_ROLL_CHANCE: PackedFloat32Array = [0.0, 0.4, 0.7, 0.9, 1.0]  # COMMON..MYTHIC
 const GEM_DROP_CHANCE: float = 0.10  # 10% of all drops are a gem instead of a weapon
+const SIGIL_DROP_CHANCE: float = 0.04  # 4% of drops are a sigil (Echo tier-up)
 
 var _weapons: Array[Dictionary] = []
 var _prefixes: Array[Dictionary] = []
@@ -73,16 +74,22 @@ func _load_data() -> void:
 func roll(monster_level: int = 1, magic_find: float = 0.0, min_rarity: int = -1) -> Item:
 	if not _data_ok:
 		return null
-	# Sometimes a drop is a gem instead of a weapon. Gems route through their
-	# own builder so the affix logic doesn't try to roll prefixes on them.
+	# Sometimes a drop is a sigil (Echo tier-up consumable) or a gem.
+	if randf() < SIGIL_DROP_CHANCE:
+		return _make_sigil_item(monster_level)
 	if not _gems.is_empty() and randf() < GEM_DROP_CHANCE:
 		return _make_gem_item(_gems[randi() % _gems.size()], monster_level)
 	var rarity: int = _roll_rarity(magic_find)
 	if min_rarity >= 0 and rarity < min_rarity:
 		rarity = min_rarity
 	# Unique rolls inject a fixed-flavor item from the uniques table.
-	if rarity == Item.Rarity.UNIQUE and not _uniques.is_empty():
-		return _make_unique_item(_uniques[randi() % _uniques.size()])
+	# Mythic rolls take a unique and append one extra random affix
+	# (per spec §4.4 "Mythic = like Unique + 1 random affix").
+	if not _uniques.is_empty():
+		if rarity == Item.Rarity.MYTHIC:
+			return _make_mythic_item(_uniques[randi() % _uniques.size()])
+		if rarity == Item.Rarity.UNIQUE:
+			return _make_unique_item(_uniques[randi() % _uniques.size()])
 	var base: Dictionary = _pick_base(monster_level)
 	var item: Item = Item.new()
 	item.base_id = String(base.get("id", ""))
@@ -136,6 +143,30 @@ func _make_unique_item(u: Dictionary) -> Item:
 		fixed_affixes.append(a)
 	item.extra_affixes = fixed_affixes
 	item.sockets = _roll_socket_count(Item.Rarity.UNIQUE)
+	return item
+
+
+func _make_mythic_item(u: Dictionary) -> Item:
+	var item: Item = _make_unique_item(u)
+	item.rarity = Item.Rarity.MYTHIC
+	# Splice one extra random affix on top of the unique's fixed roll.
+	var pool: Array[Dictionary] = _prefixes if (randi() % 2 == 0) else _suffixes
+	if not pool.is_empty():
+		var bonus: Dictionary = _roll_affix(pool)
+		bonus["name"] = "Mythic " + String(bonus.get("name", ""))
+		item.extra_affixes.append(bonus)
+	return item
+
+
+func _make_sigil_item(monster_level: int) -> Item:
+	var item: Item = Item.new()
+	item.base_id = "sigil_echo"
+	item.base_name = "Echo Sigil"
+	item.slot = "sigil"
+	item.rarity = Item.Rarity.RARE
+	item.item_level = maxi(1, monster_level)
+	item.display_name_override = "Echo Sigil"
+	item.flavor = "Click in inventory to deepen your next Echo run."
 	return item
 
 
