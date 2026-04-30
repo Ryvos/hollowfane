@@ -37,6 +37,8 @@ func _ready() -> void:
 	global_position = _spawn_position
 	hp_changed.connect(_on_hp_changed)
 	PlayerStats.stats_changed.connect(_on_stats_changed)
+	Hotbar.skill_activated.connect(_on_skill_activated)
+	HUD.bind_player(self)
 	_recompute_hp_max()
 	hp_changed.emit(_hp, _hp_max)
 
@@ -54,6 +56,19 @@ func _unhandled_input(event: InputEvent) -> void:
 				_has_target = true
 				if _sprite.animation != &"run":
 					_sprite.play(&"run")
+	elif event is InputEventKey:
+		var k: InputEventKey = event
+		if not k.pressed or k.echo:
+			return
+		var slot: int = -1
+		match k.keycode:
+			KEY_1: slot = 0
+			KEY_2: slot = 1
+			KEY_3: slot = 2
+			KEY_4: slot = 3
+		if slot >= 0:
+			Hotbar.activate(slot)
+			get_viewport().set_input_as_handled()
 
 
 func _physics_process(delta: float) -> void:
@@ -125,6 +140,13 @@ func _on_stats_changed() -> void:
 	if _hp_max > prev_max:
 		_hp += (_hp_max - prev_max)
 	hp_changed.emit(_hp, _hp_max)
+
+
+func _on_skill_activated(_slot: int, skill_id: String) -> void:
+	if skill_id == "basic_attack":
+		var nearest: Node = _find_enemy_near(global_position, 400.0)
+		if nearest != null:
+			_attack(nearest)
 
 
 func _on_hp_changed(current: int, maximum: int) -> void:

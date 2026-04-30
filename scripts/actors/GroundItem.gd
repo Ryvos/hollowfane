@@ -63,20 +63,13 @@ func _on_clicked() -> void:
 	if item == null:
 		queue_free()
 		return
-	var prev: Item = PlayerStats.equip(item)
-	var here: Vector2 = global_position
-	var parent: Node = get_parent()
+	# Pickup goes to Inventory now (was auto-equip in v0.3.0). Equip happens
+	# from the Inventory panel — keeps the loot loop legible: ground → bag,
+	# bag → body. If the bag is full, leave the item on the ground.
+	if not Inventory.add(item):
+		return
 	Tooltip.hide_tip()
 	queue_free()
-	if prev != null and parent != null:
-		var ground_scene: PackedScene = preload("res://scenes/actors/GroundItem.tscn")
-		var dropped: GroundItem = ground_scene.instantiate()
-		dropped.item = prev
-		dropped.position = here + Vector2(
-			randf_range(-REPLACE_JITTER_PX, REPLACE_JITTER_PX),
-			randf_range(-REPLACE_JITTER_PX, REPLACE_JITTER_PX)
-		)
-		parent.call_deferred(&"add_child", dropped)
 
 
 func _on_mouse_entered() -> void:

@@ -36,6 +36,10 @@ const RARITY_COLORS: Dictionary = {
 @export var prefix: Dictionary = {}
 @export var suffix: Dictionary = {}
 @export var extra_affixes: Array[Dictionary] = []
+# Inventory cell footprint. Spec §6.2: 1×1 rings, 2×2 boots, 2×4 two-handers.
+# v0.4.0 only ships 1×1; multi-cell layout lands Week 8 alongside crafting.
+@export var cell_w: int = 1
+@export var cell_h: int = 1
 
 
 func get_display_name() -> String:
