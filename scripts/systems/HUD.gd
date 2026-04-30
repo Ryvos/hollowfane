@@ -21,6 +21,7 @@ var _inventory_panel: InventoryPanel = null
 var _character_panel: CharacterPanel = null
 var _quest_panel: QuestLogPanel = null
 var _imbue_panel: ImbuePanel = null
+var _settings_panel: SettingsPanel = null
 var _ending_cutscene: EndingCutscene = null
 var _player: CharacterBody2D = null
 
@@ -122,6 +123,12 @@ func _build_panels() -> void:
 	_ending_cutscene = EndingCutscene.new()
 	_root.add_child(_ending_cutscene)
 
+	_settings_panel = SettingsPanel.new()
+	_settings_panel.set_anchors_preset(Control.PRESET_CENTER)
+	_settings_panel.position = Vector2(-220, -240)
+	_settings_panel.visible = false
+	_root.add_child(_settings_panel)
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not (event is InputEventKey):
@@ -146,6 +153,17 @@ func _unhandled_input(event: InputEvent) -> void:
 				_quest_panel.visible = false
 				_imbue_panel.visible = false
 				get_viewport().set_input_as_handled()
+			else:
+				# No other panel open → toggle Settings.
+				_settings_panel.visible = not _settings_panel.visible
+				get_viewport().set_input_as_handled()
+		KEY_F5:
+			SaveSystem.save_game()
+			get_viewport().set_input_as_handled()
+		KEY_F9:
+			if SaveSystem.has_save():
+				SaveSystem.load_game()
+			get_viewport().set_input_as_handled()
 
 
 func show_panel(name_id: String) -> void:

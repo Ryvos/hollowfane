@@ -126,6 +126,9 @@ func take_damage(amount: int) -> void:
 
 func _respawn() -> void:
 	# Spec §4.6: 10% XP debt placeholder — wired when XP exists in v0.3.0+.
+	# Spec §8: Hardcore mode permanently deletes the save on death.
+	if Settings.hardcore and SaveSystem.has_save():
+		SaveSystem.delete_save()
 	_recompute_hp_max()
 	_hp = _hp_max
 	global_position = _spawn_position

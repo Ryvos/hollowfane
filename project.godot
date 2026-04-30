@@ -12,7 +12,7 @@ config_version=5
 
 config/name="HOLLOWFANE"
 config/description="A single-player isometric action-RPG. Open-source assets only. See BUILD_PROMPT.md."
-config/version="0.10.0"
+config/version="0.11.0"
 run/main_scene="res://scenes/main/Main.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
@@ -29,6 +29,8 @@ SkillBook="*res://scripts/systems/SkillBook.gd"
 Hotbar="*res://scripts/systems/Hotbar.gd"
 QuestLog="*res://scripts/systems/QuestLog.gd"
 EchoState="*res://scripts/systems/EchoState.gd"
+Settings="*res://scripts/systems/Settings.gd"
+SaveSystem="*res://scripts/systems/SaveSystem.gd"
 HUD="*res://scripts/systems/HUD.gd"
 
 [display]

@@ -102,3 +102,54 @@ func get_color() -> Color:
 
 func get_rarity_name() -> String:
 	return RARITY_NAMES.get(rarity, "Common")
+
+
+func to_dict() -> Dictionary:
+	# Save-format snapshot. Used by SaveSystem; round-trips through
+	# `Item.from_dict()`. Plain Dictionaries (no Resources) so JSON.stringify
+	# handles it without custom encoders.
+	return {
+		"base_id": base_id,
+		"base_name": base_name,
+		"slot": slot,
+		"rarity": rarity,
+		"base_damage": base_damage,
+		"item_level": item_level,
+		"prefix": prefix,
+		"suffix": suffix,
+		"extra_affixes": extra_affixes,
+		"cell_w": cell_w,
+		"cell_h": cell_h,
+		"sockets": sockets,
+		"socketed_gems": socketed_gems,
+		"display_name_override": display_name_override,
+		"flavor": flavor,
+	}
+
+
+static func from_dict(d: Dictionary) -> Item:
+	if d.is_empty():
+		return null
+	var it: Item = Item.new()
+	it.base_id = String(d.get("base_id", ""))
+	it.base_name = String(d.get("base_name", ""))
+	it.slot = String(d.get("slot", "weapon"))
+	it.rarity = int(d.get("rarity", Rarity.COMMON))
+	it.base_damage = int(d.get("base_damage", 0))
+	it.item_level = int(d.get("item_level", 1))
+	it.prefix = d.get("prefix", {})
+	it.suffix = d.get("suffix", {})
+	var ea: Array[Dictionary] = []
+	for a: Dictionary in d.get("extra_affixes", []):
+		ea.append(a)
+	it.extra_affixes = ea
+	it.cell_w = int(d.get("cell_w", 1))
+	it.cell_h = int(d.get("cell_h", 1))
+	it.sockets = int(d.get("sockets", 0))
+	var gems: Array[Dictionary] = []
+	for g: Dictionary in d.get("socketed_gems", []):
+		gems.append(g)
+	it.socketed_gems = gems
+	it.display_name_override = String(d.get("display_name_override", ""))
+	it.flavor = String(d.get("flavor", ""))
+	return it
